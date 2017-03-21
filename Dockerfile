@@ -9,7 +9,7 @@ RUN cd $HOME \
   && tar xf jboss-as-7.1.1.Final.tar.gz \
   && rm jboss-as-7.1.1.Final.tar.gz     
 
-RUN apt-get install -y openssh-server 
+RUN yum install -y openssh-server 
        
 # RUN /opt/jboss/jboss-as-7.1.1.Final/bin/add-user.sh --silent=true admin admin   
 
