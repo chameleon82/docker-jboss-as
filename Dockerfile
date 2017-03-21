@@ -9,13 +9,17 @@ RUN cd $HOME \
   && tar xf jboss-as-7.1.1.Final.tar.gz \
   && rm jboss-as-7.1.1.Final.tar.gz     
 
-RUN /opt/jboss/jboss-as-7.1.1.Final/bin/add-user.sh --silent=true admin admin   
+RUN apt-get install -y openssh-server 
+       
+# RUN /opt/jboss/jboss-as-7.1.1.Final/bin/add-user.sh --silent=true admin admin   
 
-RUN /opt/jboss/jboss-as-7.1.1.Final/bin/jboss-cli.sh --command="module add --name=com.oracle.jdbc --resources=/tmp/ojdbc7.jar --dependencies=javax.api,javax.transaction.api" && \
-    /opt/jboss/jboss-as-7.1.1.Final/bin/jboss-cli.sh --commands=embed-server,/subsystem=datasources/jdbc-driver=oracle:add\(driver-name=ojbdc7,driver-module-name=com.oracle.jdbc,driver-xa-datasource-class-name=oracle.jdbc.xa.client.OracleXADataSource\),stop-embedded-server 
+# RUN /opt/jboss/jboss-as-7.1.1.Final/bin/jboss-cli.sh --command="module add --name=com.oracle.jdbc --resources=/tmp/ojdbc7.jar --dependencies=javax.api,javax.transaction.api" && \
+#    /opt/jboss/jboss-as-7.1.1.Final/bin/jboss-cli.sh --commands=embed-server,/subsystem=datasources/jdbc-driver=oracle:add\(driver-name=ojbdc7,driver-module-name=com.oracle.jdbc,driver-xa-datasource-class-name=oracle.jdbc.xa.client.OracleXADataSource\),stop-embedded-server 
     
 ENV LAUNCH_JBOSS_IN_BACKGROUND true
     
-EXPOSE 8080 9990    
+EXPOSE 8080 9990 22   
+
+ENTRYPOINT ["/usr/sbin/sshd","-D","&"]
 
 CMD ["/opt/jboss/jboss-as-7.1.1.Final/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
