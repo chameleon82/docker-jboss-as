@@ -2,12 +2,13 @@ FROM jboss/base-jdk:7
 
 ENV JBOSS_HOME /opt/jboss-as-7.1.1.Final
 
-RUN cd /tmp && \
-    curl -O http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.tar.gz && \
-    tar zxvf /tmp/jboss-as-7.1.1.Final.tar.gz -C /opt && \
-    sed -i -r 's/jboss.bind.address.management:127.0.0.1/jboss.bind.address.management:0.0.0.0/' && \
-    /opt/jboss-as-7.1.1.Final/standalone/configuration/standalone.xml && \
-    rm -rf /tmp/* /var/tmp/*
+RUN cd $HOME \
+    && curl -O http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.tar.gz \
+    && tar xf jboss-as-7.1.1.Final.tar.gz \
+    && mv $HOME/jboss-as-7.1.1.Final.tar.gz $JBOSS_HOME \
+    && rm jboss-as-7.1.1.Final.tar.gz 
+    
+ENV LAUNCH_JBOSS_IN_BACKGROUND true
     
 EXPOSE 8080 9990    
 
