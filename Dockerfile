@@ -2,14 +2,18 @@ FROM jboss/base-jdk:7
 
 ENV JBOSS_HOME /opt/jboss/jboss-as-7.1.1.Final
 
+USER root
+
+RUN yum install -y openssh-server 
+
+USER jboss
+
 COPY ojdbc7.jar /tmp
 
 RUN cd $HOME \
   && curl -O http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.tar.gz \
   && tar xf jboss-as-7.1.1.Final.tar.gz \
   && rm jboss-as-7.1.1.Final.tar.gz     
-
-RUN yum install -y openssh-server 
        
 # RUN /opt/jboss/jboss-as-7.1.1.Final/bin/add-user.sh --silent=true admin admin   
 
