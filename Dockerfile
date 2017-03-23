@@ -2,22 +2,22 @@ FROM jboss/base-jdk:7
 
 ENV JBOSS_HOME /opt/jboss/jboss-as-7.1.1.Final
 
-USER root
+# USER root
 
-RUN yum install -y openssh-server && \
-    mkdir /var/run/sshd && \
-    echo 'root:admin' | chpasswd && \
-    sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-    sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+# RUN yum install -y openssh-server && \
+#    mkdir /var/run/sshd && \
+#    echo 'root:admin' | chpasswd && \
+#    sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+#    sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
-USER jboss
+# USER jboss
 
 COPY ojdbc7.jar /tmp
 
-RUN cd $HOME \
-  && curl -O http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.tar.gz \
-  && tar xf jboss-as-7.1.1.Final.tar.gz \
-  && rm jboss-as-7.1.1.Final.tar.gz     
+# RUN cd $HOME \
+#  && curl -O http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.tar.gz \
+#  && tar xf jboss-as-7.1.1.Final.tar.gz \
+#  && rm jboss-as-7.1.1.Final.tar.gz     
        
 # RUN /opt/jboss/jboss-as-7.1.1.Final/bin/add-user.sh --silent=true admin admin   
 
@@ -26,8 +26,9 @@ RUN cd $HOME \
     
 ENV LAUNCH_JBOSS_IN_BACKGROUND true
     
-EXPOSE 8080 9990 22   
+EXPOSE 8080 9990 
+#22   
 
-ENTRYPOINT ["/usr/sbin/sshd","-D","&"]
+# ENTRYPOINT ["/usr/sbin/sshd","-D","&"]
 
 CMD ["/opt/jboss/jboss-as-7.1.1.Final/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
